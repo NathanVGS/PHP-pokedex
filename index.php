@@ -1,3 +1,4 @@
+<?php /*declare(strict_types = 1);*/?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -113,21 +114,20 @@ if(!empty($_GET['poke'])) {
                     <div class="left-container_buttons">
                         <?php
                         if(!empty($_GET['poke'])){
-                        var_dump($pokemon['id']);
+                        $prevId = $pokemon['id'] - 1;
+                        $nextId = $pokemon['id'] + 1;
                         if($pokemon['id'] !== 1){
-                            echo "<a href='./index.php?poke=" . --$pokemon['id'] . "' class=\"link-button\">Previous</a>";
+                            echo "<a href='./index.php?poke=" . $prevId . "' class=\"link-button\">Previous</a>";
                         } else {
-                            echo "<a href='./index.php?poke=807' class='LinkButton'>Previous</a>";
+                            echo "<a href='./index.php?poke=807' class='link-button'>Previous</a>";
                         }
-                        echo "<br>";
                         if($pokemon['id'] !== 807){
-                            echo "<a href='./index.php?poke=" . ++$pokemon['id'] . "' class=\"LinkButton\">Next</a>";
+                            echo "<a href='./index.php?poke=" . $nextId . "' class=\"link-button\">Next</a>";
                         } else {
-                            echo "<a href='./index.php?poke=1' class='LinkButton'>Next</a>";
+                            echo "<a href='./index.php?poke=1' class='link-button'>Next</a>";
                         }
                         }
                         ?>
-
                         <!--<div class="left-button" id="previous">Prev</div>
                         <div class="right-button" id="next">Next</div>-->
                         <!--<div class="search-button" id="search">Search</div>-->
@@ -160,11 +160,11 @@ if(!empty($_GET['poke'])) {
                     echo "Moves: <br>";
                     if ($nrOfMoves = count($moves) >= 4) {
                         foreach (array_rand($moves, 4) as $index) {
-                            echo $moveCount++ . ". " . $moves[$index]['move']['name'] . "<br>";
+                            echo $moveCount++ . " . " . $moves[$index]['move']['name'] . "<br>";
                         }
                     } else {
                         foreach ($moves as $move) {
-                            echo $moveCount++ . ". " . $move['move']['name'] . "<br>";
+                            echo $moveCount++ . " . " . $move['move']['name'] . "<br>";
                         }
                     }
                 }
@@ -198,11 +198,23 @@ if(!empty($_GET['poke'])) {
             </div>
         </div>
         <div class="right-container_buttons">
-            <div class="left-button">Prev evolution</div>
-            <div class="right-button">Next evolution</div>
-            <!--        <div class="random-button">Random</div>
-                    <div class="search-button">Search</div>-->
-
+            <form action="index.php" method="get">
+                <?php
+                echo "<input style=\"display:none\" type=\"text\" name=\"poke\" value=\"";
+                if(!empty($_GET['poke'])){
+                    if($first_form_data['name'] === $pokemon['name']){
+                        echo $first_form_data["name"] . "\">";
+                        echo "<input type=\"submit\" value=\"Previous Evolution\" disabled>";
+                    } else {
+                        echo $first_form_data['name'];
+                        echo "\">";
+                        echo "<input type=\"submit\" value=\"Previous Evolution\">";
+                    }
+                } else {
+                    echo "\"";
+                }
+                ?>
+            </form>
         </div>
     </div>
 </div>

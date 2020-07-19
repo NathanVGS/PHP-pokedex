@@ -624,10 +624,14 @@ ol {
 .evolutions img {
     width: 70px;
 }
-a .link-button {
-    border-style: solid;
-    border-width : 1px 1px 1px 1px;
+a.link-button {
+    border: 1px solid #000000;
     text-decoration : none;
+    background: #FFFFFF;
+    color: black;
+    border-radius: 4px;
     padding : 4px;
-    border-color : #000000;
+}
+.left-container_controllers{
+    margin-top: 6px;
 }
