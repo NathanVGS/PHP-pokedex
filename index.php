@@ -17,7 +17,8 @@ error_reporting(E_ALL);
 
 if(!empty($_GET['poke'])) {
     $data = file_get_contents("https://pokeapi.co/api/v2/pokemon/" . strtolower($_GET['poke']));
-    $pokemon = json_decode($data, true);
+    $pokemon = json_decode($data, true)
+        /*|| die("Unable to find Pokemon '{$_GET['poke']}' \n <br><br><form action=\"#\"><input type='submit' value='Refresh'/></form>")*/;
     $species_data = file_get_contents("https://pokeapi.co/api/v2/pokemon-species/" . strtolower($_GET['poke']));
     $species = json_decode($species_data, true);
     $evolution_data = file_get_contents($species["evolution_chain"]["url"]);
@@ -158,7 +159,7 @@ if(!empty($_GET['poke'])) {
                 $moveCount = 1;
                 if(!empty($_GET['poke'])) {
                     echo "Moves: <br>";
-                    if ($nrOfMoves = count($moves) >= 4) {
+                    if ($nrOfMoves >= 4) {
                         foreach (array_rand($moves, 4) as $index) {
                             echo $moveCount++ . " . " . $moves[$index]['move']['name'] . "<br>";
                         }
@@ -200,13 +201,24 @@ if(!empty($_GET['poke'])) {
         <div class="right-container_buttons">
             <form action="index.php" method="get">
                 <?php
+                function findPokeInEvo($evoArr, $pokeNeeded){
+                    foreach($evoArr as $evo){
+                        if($evo['species']['name'] === $pokeNeeded){
+                            return true;
+                        }
+                    } return false;
+                }
                 echo "<input style=\"display:none\" type=\"text\" name=\"poke\" value=\"";
                 if(!empty($_GET['poke'])){
                     if($first_form_data['name'] === $pokemon['name']){
                         echo $first_form_data["name"] . "\">";
                         echo "<input type=\"submit\" value=\"Previous Evolution\" disabled>";
-                    } else {
+                    } elseif(findPokeInEvo($second_form, $pokemon['name'])) {
                         echo $first_form_data['name'];
+                        echo "\">";
+                        echo "<input type=\"submit\" value=\"Previous Evolution\">";
+                    } else {
+                        echo $second_form[0]['species']['name'];
                         echo "\">";
                         echo "<input type=\"submit\" value=\"Previous Evolution\">";
                     }
